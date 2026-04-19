@@ -6,6 +6,15 @@
 
 <ul>
 {% for question in questions %}
-    <li>{{ question.question_text }}</li>
+    <li>
+        {{ question.question_text }}
+        <ul>
+        {% for choice in question.choice_set.all %}
+            {% if choice.is_correct %}
+                <li><b>Correct: {{ choice.choice_text }}</b></li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    </li>
 {% endfor %}
 </ul>

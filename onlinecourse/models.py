@@ -17,11 +17,15 @@ class Lesson(models.Model):
 class Question(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     question_text = models.CharField(max_length=200)
+    grade = models.IntegerField(default=1)   # ✅ REQUIRED
+
+    def __str__(self):
+        return self.question_text
 
     def is_get_score(self, selected_ids):
         correct_choices = self.choice_set.filter(is_correct=True)
         if set(selected_ids) == set([c.id for c in correct_choices]):
-            return 1
+            return self.grade
         return 0
 
 class Choice(models.Model):
@@ -32,4 +36,5 @@ class Choice(models.Model):
 class Submission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    enrollment = models.CharField(max_length=100, default="default")  # ✅ REQUIRED
     choices = models.ManyToManyField(Choice)
